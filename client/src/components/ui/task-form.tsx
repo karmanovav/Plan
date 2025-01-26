@@ -18,7 +18,7 @@ import {
 import { useForm } from "react-hook-form";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Plus } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { z } from "zod";
@@ -67,7 +67,8 @@ export function TaskForm() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-[#8B7355] hover:bg-[#6B5745]">
+        <Button className="bg-[#8B7355] hover:bg-[#6B5745] text-white">
+          <Plus className="h-4 w-4 mr-2" />
           Новая задача
         </Button>
       </DialogTrigger>
@@ -142,8 +143,8 @@ export function TaskForm() {
                 </FormItem>
               )}
             />
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full bg-[#8B7355] hover:bg-[#6B5745]"
               disabled={createTask.isPending}
             >
