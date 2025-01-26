@@ -79,14 +79,10 @@ export function TaskCard({ task }: TaskCardProps) {
     });
   };
 
-  const statusIcon = {
-    created: <Circle className="h-4 w-4" />,
-    in_progress: <PlayCircle className="h-4 w-4" />,
-    completed: <CheckCircle className="h-4 w-4" />,
-  };
+  const cardColorClass = task.categoryId ? CATEGORY_COLORS[parseInt(task.categoryId)] : "";
 
   return (
-    <Card className="mb-4 transition-all hover:shadow-md">
+    <Card className={cn("mb-4 transition-all hover:shadow-md", cardColorClass)}>
       <CardContent className="p-4">
         <div className="flex items-start justify-between">
           <div className="flex-1">
@@ -115,27 +111,21 @@ export function TaskCard({ task }: TaskCardProps) {
             </div>
             <p className="text-sm text-muted-foreground mt-2">{task.description}</p>
             <div className="flex items-center gap-3 mt-4">
-              <Badge variant="outline" className="text-xs">
+              <Badge variant="outline" className="text-xs bg-white">
                 {format(new Date(task.dueDate), "d MMMM yyyy", { locale: ru })}
               </Badge>
               <Badge 
                 variant="secondary"
                 className={cn(
-                  "text-xs",
-                  task.status === "completed" && "bg-green-100",
-                  task.status === "in_progress" && "bg-blue-100"
+                  "text-xs bg-white",
+                  task.status === "completed" && "border-green-200",
+                  task.status === "in_progress" && "border-blue-200"
                 )}
               >
                 {TASK_STATUS_LABELS[task.status as TaskStatus]}
               </Badge>
               {task.categoryName && task.categoryId && (
-                <Badge 
-                  variant="outline" 
-                  className={cn(
-                    "text-xs",
-                    CATEGORY_COLORS[task.categoryId] || "bg-gray-50 border-gray-200 text-gray-700"
-                  )}
-                >
+                <Badge variant="outline" className="text-xs bg-white">
                   {task.categoryName}
                 </Badge>
               )}
