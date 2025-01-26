@@ -48,8 +48,8 @@ export function TaskList({
     return matchesStatus && matchesCategory && matchesPeriod;
   }).sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
 
-  // Создаем массив из 20 пустых строк
-  const emptyLines = Array(20).fill(null);
+  // Создаем массив из 16 пустых строк
+  const emptyLines = Array(16).fill(null);
 
   return (
     <div className="space-y-4">

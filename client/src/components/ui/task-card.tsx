@@ -114,25 +114,27 @@ export function TaskCard({ task }: TaskCardProps) {
               </Button>
             </div>
             <p className="text-sm text-muted-foreground mt-2">{task.description}</p>
-            <div className="flex items-center gap-2 mt-2">
-              <Badge variant="outline" className="text-xs">
+            <div className="flex flex-col gap-2 mt-2">
+              <Badge variant="outline" className="text-xs w-fit">
                 {format(new Date(task.dueDate), "d MMMM yyyy", { locale: ru })}
               </Badge>
-              <Badge 
-                variant="secondary"
-                className={cn(
-                  "text-xs",
-                  task.status === "completed" && "bg-green-100",
-                  task.status === "in_progress" && "bg-blue-100"
-                )}
-              >
-                {TASK_STATUS_LABELS[task.status as TaskStatus]}
-              </Badge>
-              {task.categoryName && (
-                <Badge variant="outline" className="text-xs">
-                  {task.categoryName}
+              <div className="flex items-center gap-2">
+                <Badge 
+                  variant="secondary"
+                  className={cn(
+                    "text-xs",
+                    task.status === "completed" && "bg-green-100",
+                    task.status === "in_progress" && "bg-blue-100"
+                  )}
+                >
+                  {TASK_STATUS_LABELS[task.status as TaskStatus]}
                 </Badge>
-              )}
+                {task.categoryName && (
+                  <Badge variant="outline" className="text-xs">
+                    {task.categoryName}
+                  </Badge>
+                )}
+              </div>
             </div>
           </div>
           <div className="flex gap-2">
