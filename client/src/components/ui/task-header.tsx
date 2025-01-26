@@ -1,8 +1,7 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { TaskForm } from "@/components/ui/task-form";
-import { Calendar as CalendarIcon, Plus } from "lucide-react";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
 import {
   TASK_STATUS_LABELS,
   TASK_CATEGORY_LABELS,
@@ -70,15 +69,7 @@ export function TaskHeader({
           ))}
         </SelectContent>
       </Select>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="bg-[#8B7355] hover:bg-[#6B5745] text-white ml-auto">
-            <Plus className="h-4 w-4 mr-2" />
-            Новая задача
-          </Button>
-        </DialogTrigger>
-        <TaskForm />
-      </Dialog>
+      <TaskForm />
     </div>
   );
 }
