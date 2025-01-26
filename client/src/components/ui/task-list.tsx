@@ -43,7 +43,8 @@ export function TaskList({
 
   const filteredTasks = tasks?.filter(task => {
     const matchesStatus = statusFilter === "all" || task.status === statusFilter;
-    const matchesCategory = categoryFilter === "all" || task.categoryId.toString() === categoryFilter;
+    const matchesCategory = categoryFilter === "all" || 
+      (task.categoryId !== null && task.categoryId.toString() === categoryFilter);
     const matchesPeriod = filterByPeriod(task);
     return matchesStatus && matchesCategory && matchesPeriod;
   }).sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
