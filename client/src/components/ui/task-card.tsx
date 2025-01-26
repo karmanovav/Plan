@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Task } from "@db/schema";
-import { TASK_STATUS_LABELS, TaskStatus } from "@/lib/constants";
+import { TASK_STATUS_LABELS, TaskStatus, CATEGORY_COLORS } from "@/lib/constants";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -16,7 +16,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface TaskCardProps {
-  task: Task & { categoryName?: string };
+  task: Task & { categoryName?: string; categoryId?: string };
 }
 
 export function TaskCard({ task }: TaskCardProps) {
@@ -128,8 +128,14 @@ export function TaskCard({ task }: TaskCardProps) {
               >
                 {TASK_STATUS_LABELS[task.status as TaskStatus]}
               </Badge>
-              {task.categoryName && (
-                <Badge variant="outline" className="text-xs">
+              {task.categoryName && task.categoryId && (
+                <Badge 
+                  variant="outline" 
+                  className={cn(
+                    "text-xs",
+                    CATEGORY_COLORS[task.categoryId] || "bg-gray-50 border-gray-200 text-gray-700"
+                  )}
+                >
                   {task.categoryName}
                 </Badge>
               )}

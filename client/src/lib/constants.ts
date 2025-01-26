@@ -40,6 +40,16 @@ export const TIME_PERIOD_LABELS = {
   [TIME_PERIODS.YEAR]: "На год"
 } as const;
 
+// Пастельные цвета для категорий
+export const CATEGORY_COLORS: { [key: number]: string } = {
+  1: "bg-blue-50 border-blue-200 text-blue-700",
+  2: "bg-pink-50 border-pink-200 text-pink-700",
+  3: "bg-green-50 border-green-200 text-green-700",
+  4: "bg-yellow-50 border-yellow-200 text-yellow-700",
+  5: "bg-purple-50 border-purple-200 text-purple-700",
+  6: "bg-orange-50 border-orange-200 text-orange-700",
+};
+
 export type TaskStatus = keyof typeof TASK_STATUS_LABELS;
 export type TaskCategory = keyof typeof TASK_CATEGORY_LABELS;
 export type TimePeriod = keyof typeof TIME_PERIOD_LABELS;
