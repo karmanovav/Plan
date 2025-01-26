@@ -1,10 +1,23 @@
 import { TaskCard } from "@/components/ui/task-card";
 import { useQuery } from "@tanstack/react-query";
 import { Task } from "@db/schema";
-import { format, isToday } from "date-fns";
+import { format, isToday, isThisWeek, isThisMonth, isThisYear } from "date-fns";
 import { ru } from "date-fns/locale";
+import { TaskStatus, TaskCategory, TimePeriod } from "@/lib/constants";
 
-export function TaskList() {
+interface TaskListProps {
+  statusFilter: TaskStatus | "all";
+  categoryFilter: TaskCategory | "all";
+  periodFilter: TimePeriod;
+  selectedDate: Date;
+}
+
+export function TaskList({
+  statusFilter,
+  categoryFilter,
+  periodFilter,
+  selectedDate
+}: TaskListProps) {
   const { data: tasks, isLoading } = useQuery<Task[]>({
     queryKey: ["/api/tasks"],
   });
@@ -13,9 +26,28 @@ export function TaskList() {
     return <div>Загрузка...</div>;
   }
 
-  const todayTasks = tasks?.filter(task => 
-    isToday(new Date(task.dueDate))
-  ).sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+  const filterByPeriod = (task: Task) => {
+    const taskDate = new Date(task.dueDate);
+    switch (periodFilter) {
+      case "today":
+        return isToday(taskDate);
+      case "week":
+        return isThisWeek(taskDate);
+      case "month":
+        return isThisMonth(taskDate);
+      case "year":
+        return isThisYear(taskDate);
+      default:
+        return true;
+    }
+  };
+
+  const filteredTasks = tasks?.filter(task => {
+    const matchesStatus = statusFilter === "all" || task.status === statusFilter;
+    const matchesCategory = categoryFilter === "all" || task.category === categoryFilter;
+    const matchesPeriod = filterByPeriod(task);
+    return matchesStatus && matchesCategory && matchesPeriod;
+  }).sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
 
   return (
     <div className="space-y-2 pt-4">
@@ -23,7 +55,7 @@ export function TaskList() {
         {format(new Date(), "d MMMM yyyy", { locale: ru })}
       </div>
       <div className="space-y-4">
-        {todayTasks?.map((task) => (
+        {filteredTasks?.map((task) => (
           <div key={task.id} className="border-b border-gray-200 py-2">
             <div className="flex items-center gap-4">
               <div className="w-6 h-6 border border-gray-400 rounded-full flex items-center justify-center">
@@ -38,9 +70,9 @@ export function TaskList() {
             </div>
           </div>
         ))}
-        {todayTasks?.length === 0 && (
+        {filteredTasks?.length === 0 && (
           <div className="text-center text-gray-500 italic py-8">
-            Нет задач на сегодня
+            Нет задач для отображения
           </div>
         )}
       </div>

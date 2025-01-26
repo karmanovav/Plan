@@ -6,6 +6,7 @@ export const tasks = pgTable("tasks", {
   title: text("title").notNull(),
   description: text("description"),
   status: varchar("status", { length: 20 }).notNull().default("created"),
+  category: varchar("category", { length: 50 }).notNull().default("general"),
   dueDate: timestamp("due_date").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull()
