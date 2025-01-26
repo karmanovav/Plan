@@ -42,12 +42,12 @@ export const TIME_PERIOD_LABELS = {
 
 // Пастельные цвета для категорий
 export const CATEGORY_COLORS: { [key: number]: string } = {
-  1: "bg-blue-50 border-blue-200 text-blue-700",
-  2: "bg-pink-50 border-pink-200 text-pink-700",
-  3: "bg-green-50 border-green-200 text-green-700",
-  4: "bg-yellow-50 border-yellow-200 text-yellow-700",
-  5: "bg-purple-50 border-purple-200 text-purple-700",
-  6: "bg-orange-50 border-orange-200 text-orange-700",
+  1: "bg-blue-50 hover:bg-blue-100",
+  2: "bg-pink-50 hover:bg-pink-100",
+  3: "bg-green-50 hover:bg-green-100",
+  4: "bg-yellow-50 hover:bg-yellow-100",
+  5: "bg-purple-50 hover:bg-purple-100",
+  6: "bg-orange-50 hover:bg-orange-100",
 };
 
 export type TaskStatus = keyof typeof TASK_STATUS_LABELS;
