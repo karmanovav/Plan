@@ -3,10 +3,6 @@ import { Button } from "@/components/ui/button";
 import { TaskForm } from "@/components/ui/task-form";
 import { Calendar as CalendarIcon, Plus } from "lucide-react";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { format } from "date-fns";
-import { ru } from "date-fns/locale";
 import {
   TASK_STATUS_LABELS,
   TASK_CATEGORY_LABELS,
@@ -15,6 +11,8 @@ import {
   TaskCategory,
   TimePeriod
 } from "@/lib/constants";
+import { format } from "date-fns";
+import { ru } from "date-fns/locale";
 
 interface TaskHeaderProps {
   onStatusChange: (status: TaskStatus | "all") => void;
@@ -72,24 +70,9 @@ export function TaskHeader({
           ))}
         </SelectContent>
       </Select>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button variant="outline" size="icon">
-            <CalendarIcon className="h-4 w-4" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            mode="single"
-            selected={new Date()}
-            onSelect={onDateSelect}
-            locale={ru}
-          />
-        </PopoverContent>
-      </Popover>
       <Dialog>
         <DialogTrigger asChild>
-          <Button>
+          <Button className="bg-[#8B7355] hover:bg-[#6B5745] text-white ml-auto">
             <Plus className="h-4 w-4 mr-2" />
             Новая задача
           </Button>
