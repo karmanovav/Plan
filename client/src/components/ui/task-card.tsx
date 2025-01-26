@@ -1,15 +1,15 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Task } from "@db/schema";
 import { TASK_STATUS_LABELS, TaskStatus } from "@/lib/constants";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CheckCircle, Circle, Edit2, PlayCircle } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CheckCircle, Circle, Edit2, PlayCircle, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
@@ -58,6 +58,19 @@ export function TaskCard({ task }: TaskCardProps) {
     },
   });
 
+  const deleteTask = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(`/api/tasks/${task.id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) throw new Error("Failed to delete task");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/tasks"] });
+    },
+  });
+
   const handleSaveEdit = () => {
     updateTask.mutate({
       title: editedTitle,
@@ -77,7 +90,10 @@ export function TaskCard({ task }: TaskCardProps) {
       <CardContent className="p-4">
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 border border-gray-400 rounded-full flex items-center justify-center">
+                {task.status === "completed" && "✓"}
+              </div>
               <h3 className="font-medium text-lg">{task.title}</h3>
               <Button
                 variant="ghost"
@@ -87,9 +103,18 @@ export function TaskCard({ task }: TaskCardProps) {
               >
                 <Edit2 className="h-4 w-4" />
               </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-red-500 hover:text-red-700"
+                onClick={() => deleteTask.mutate()}
+                disabled={deleteTask.isPending}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
             </div>
-            <p className="text-sm text-muted-foreground mb-2">{task.description}</p>
-            <div className="flex items-center gap-2">
+            <p className="text-sm text-muted-foreground mt-2">{task.description}</p>
+            <div className="flex items-center gap-2 mt-2">
               <Badge variant="outline" className="text-xs">
                 {format(new Date(task.dueDate), "d MMMM yyyy", { locale: ru })}
               </Badge>

@@ -85,6 +85,18 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
+  app.delete("/api/tasks/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      await db
+        .delete(tasks)
+        .where(eq(tasks.id, parseInt(id)));
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete task" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

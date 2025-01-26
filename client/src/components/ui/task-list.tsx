@@ -1,7 +1,7 @@
 import { TaskCard } from "@/components/ui/task-card";
 import { useQuery } from "@tanstack/react-query";
 import { Task } from "@db/schema";
-import { format, isToday, isThisWeek, isThisMonth, isThisYear } from "date-fns";
+import { isToday, isThisWeek, isThisMonth, isThisYear } from "date-fns";
 import { TaskStatus, TaskCategory, TimePeriod } from "@/lib/constants";
 
 interface TaskListProps {
@@ -17,7 +17,7 @@ export function TaskList({
   periodFilter,
   selectedDate
 }: TaskListProps) {
-  const { data: tasks, isLoading } = useQuery<Task[]>({
+  const { data: tasks, isLoading } = useQuery<(Task & { categoryName?: string })[]>({
     queryKey: ["/api/tasks"],
   });
 
@@ -43,7 +43,7 @@ export function TaskList({
 
   const filteredTasks = tasks?.filter(task => {
     const matchesStatus = statusFilter === "all" || task.status === statusFilter;
-    const matchesCategory = categoryFilter === "all" || task.category === categoryFilter;
+    const matchesCategory = categoryFilter === "all" || task.categoryId.toString() === categoryFilter;
     const matchesPeriod = filterByPeriod(task);
     return matchesStatus && matchesCategory && matchesPeriod;
   }).sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
@@ -54,19 +54,7 @@ export function TaskList({
   return (
     <div className="space-y-4">
       {filteredTasks?.map((task) => (
-        <div key={task.id} className="border-b border-gray-200 py-2">
-          <div className="flex items-center gap-4">
-            <div className="w-6 h-6 border border-gray-400 rounded-full flex items-center justify-center">
-              {task.status === "completed" && "✓"}
-            </div>
-            <div>
-              <div className="font-medium">{task.title}</div>
-              {task.description && (
-                <div className="text-sm text-gray-600">{task.description}</div>
-              )}
-            </div>
-          </div>
-        </div>
+        <TaskCard key={task.id} task={task} />
       ))}
       {/* Добавляем пустые строки */}
       {emptyLines.map((_, index) => (
