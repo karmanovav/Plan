@@ -79,7 +79,9 @@ export function TaskCard({ task }: TaskCardProps) {
     });
   };
 
-  const cardColorClass = task.categoryId ? CATEGORY_COLORS[parseInt(task.categoryId)] : "";
+  const cardColorClass = task.status === "completed" 
+    ? "bg-gray-50 hover:bg-gray-100" 
+    : (task.categoryId ? CATEGORY_COLORS[parseInt(task.categoryId)] : "");
 
   return (
     <Card className={cn("mb-4 transition-all hover:shadow-md", cardColorClass)}>
@@ -132,7 +134,7 @@ export function TaskCard({ task }: TaskCardProps) {
             </div>
           </div>
           <div className="flex gap-2">
-            {task.status !== "in_progress" && (
+            {task.status !== "completed" && task.status !== "in_progress" && (
               <Button 
                 variant="ghost" 
                 size="sm"

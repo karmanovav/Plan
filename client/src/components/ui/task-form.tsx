@@ -32,6 +32,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Category } from "@db/schema";
+import { useState } from "react";
 
 const taskSchema = z.object({
   title: z.string().min(1, "Обязательное поле"),
@@ -43,6 +44,7 @@ const taskSchema = z.object({
 });
 
 export function TaskForm() {
+  const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: categories } = useQuery<Category[]>({
@@ -75,6 +77,7 @@ export function TaskForm() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/tasks"] });
       form.reset();
+      setIsOpen(false);
     },
   });
 
@@ -83,7 +86,7 @@ export function TaskForm() {
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button className="bg-[#8B7355] hover:bg-[#6B5745] text-white">
           <Plus className="h-4 w-4 mr-2" />
