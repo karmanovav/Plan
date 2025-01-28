@@ -79,6 +79,8 @@ export function TaskCard({ task }: TaskCardProps) {
     });
   };
 
+  const isBirthdayTask = task.categoryName === "День Рождения";
+
   const cardColorClass = task.status === "completed" 
     ? "bg-gray-50 hover:bg-gray-100" 
     : (task.categoryId ? CATEGORY_COLORS[parseInt(task.categoryId)] : "");
@@ -133,30 +135,32 @@ export function TaskCard({ task }: TaskCardProps) {
               )}
             </div>
           </div>
-          <div className="flex gap-2">
-            {task.status !== "completed" && task.status !== "in_progress" && (
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => updateStatus.mutate("in_progress")}
-                disabled={updateStatus.isPending}
-              >
-                <PlayCircle className="h-4 w-4 mr-1" />
-                Начать
-              </Button>
-            )}
-            {task.status !== "completed" && (
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => updateStatus.mutate("completed")}
-                disabled={updateStatus.isPending}
-              >
-                <CheckCircle className="h-4 w-4 mr-1" />
-                Завершить
-              </Button>
-            )}
-          </div>
+          {!isBirthdayTask && (
+            <div className="flex gap-2">
+              {task.status !== "completed" && task.status !== "in_progress" && (
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => updateStatus.mutate("in_progress")}
+                  disabled={updateStatus.isPending}
+                >
+                  <PlayCircle className="h-4 w-4 mr-1" />
+                  Начать
+                </Button>
+              )}
+              {task.status !== "completed" && (
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => updateStatus.mutate("completed")}
+                  disabled={updateStatus.isPending}
+                >
+                  <CheckCircle className="h-4 w-4 mr-1" />
+                  Завершить
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       </CardContent>
 
